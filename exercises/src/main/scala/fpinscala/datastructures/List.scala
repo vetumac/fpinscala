@@ -123,5 +123,29 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def filter2[A](as: List[A])(f: A => Boolean): List[A] = flatMap(as)(a => if (f(a)) List(a) else Nil)
 
-  def zp(l1: List[Int], l2: List[Int]): List[Int] =
+  def zp(a: List[Int], b: List[Int]): List[Int] =
+    (a, b) match {
+      case (Cons(h1, t1), Cons(h2, t2)) => Cons(h1 + h2, zp(t1, t2))
+      case _ => Nil
+    }
+
+  def zipWith[A](a: List[A], b: List[A], f: (A, A) => A): List[A] =
+    (a, b) match {
+      case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), zipWith(t1, t2, f))
+      case _ => Nil
+    }
+
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
+    def startWith(subj: List[A], obj: List[A]): Boolean =
+      (subj, obj) match {
+        case (_, Nil) => true
+        case (Cons(sh, st), Cons(oh, ot)) if sh == oh => startWith(st, ot)
+        case _ => false
+      }
+
+    sup match {
+      case Nil => false
+      case Cons(_, t) => if (startWith(sup, sub)) true else hasSubsequence(t, sub)
+    }
+  }
 }

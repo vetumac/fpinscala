@@ -111,5 +111,17 @@ object List { // `List` companion object. Contains functions for creating and wo
   }
 
 
-  def map[A, B](l: List[A])(f: A => B): List[B] = ???
+  def inc(list: List[Int]): List[Int] = foldLeft(list, Nil: List[Int])((l, n) => Cons(n + 1, l))
+
+  def toString(list: List[Double]): List[String] = foldLeft(list, Nil: List[String])((l, n) => Cons(n.toString, l))
+
+  def map[A, B](l: List[A])(f: A => B): List[B] = foldLeft(l, Nil: List[B])((t, h) => Cons(f(h), t))
+
+  def filter[A](as: List[A])(f: A => Boolean): List[A] = foldLeft(as, Nil: List[A])((t, h) => if (f(h)) Cons(h, t) else t)
+
+  def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = foldLeft(map(as)(f), Nil: List[B])(append)
+
+  def filter2[A](as: List[A])(f: A => Boolean): List[A] = flatMap(as)(a => if (f(a)) List(a) else Nil)
+
+  def zp(l1: List[Int], l2: List[Int]): List[Int] =
 }

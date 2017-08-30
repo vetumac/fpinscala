@@ -106,9 +106,13 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def reserse[A](l: List[A]) = foldLeft(l, List[A]())((ls: List[A], i: A) => Cons(i, ls))
 
-  def foldLeft2[A, B](l: List[A], z: B)(f: (B, A) => B): B = {
-    foldRight(l, z)()
-  }
+  def foldRightViaFoldLeft_1[A, B](l: List[A], z: B)(f: (A, B) => B): B =
+    foldLeft(l, (b: B) => b)((g, a) => b => g(f(a, b)))(z)
+
+  def append[A](a1: List[A], a2: List[A]): List[A] =
+    foldRight(a1, a2)(Cons(_, _))
+
+  def unit[A](ll: List[List[A]]) = foldLeft(ll, Nil: List[A])(append)
 
 
   def inc(list: List[Int]): List[Int] = foldLeft(list, Nil: List[Int])((l, n) => Cons(n + 1, l))

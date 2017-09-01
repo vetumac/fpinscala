@@ -1,13 +1,6 @@
-case class Container[-A]()
+val a: Option[Int] = Some(3)
+val b: Option[Int] = Some(3)
+val c: Option[Int] = Some(3)
 
-class A
-
-class B extends A
-
-val a = Container[A]()
-
-val b = Container[B]()
-
-a.isInstanceOf[Container[B]]
-
-List
+val result =
+  a.flatMap(aa => b.flatMap(bb => c.map(cc => aa + bb + cc)))

@@ -55,9 +55,18 @@ object Option {
 
   def variance(xs: Seq[Double]): Option[Double] = mean(xs) flatMap (m => mean(xs.map(x => math.pow(x - m, 2))))
 
-  def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = ???
+  def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
+    a.flatMap(aFlat => b.map(bFlat => f(aFlat, bFlat)))
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = ???
+  def sequence[A](a: List[Option[A]]): Option[List[A]] =
+    a match {
+      case Nil => Some(Nil)
+      case xOpt :: xsOpt => xOpt.flatMap(x => sequence(xsOpt).map(acc => x :: acc))
+    }
 
-  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = ???
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+    a match {
+      case Nil => Some(Nil)
+      case x :: xs => f(x).flatMap(xOpt => traverse(xs)(f).map(acc => xOpt :: acc))
+    }
 }

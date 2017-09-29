@@ -89,7 +89,32 @@ object Stream {
 
   val ones: Stream[Int] = Stream.cons(1, ones)
 
-  def from(n: Int): Stream[Int] = ???
+  def constant[A](a: A): Stream[A] = Stream.cons(a, constant(a))
 
-  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = ???
+  def from(n: Int): Stream[Int] = Stream.cons(n, from(n + 1))
+
+  def fibs: Stream[Int] = {
+    def fib(a: Int, b: Int): Stream[Int] = Stream.cons(a, fib(b, a + b))
+
+    fib(0, 1)
+  }
+
+  def fibsU: Stream[Int] = {
+    unfold((0, 1))(s => Some((s._1, s._1 + s._2)))
+
+    def fib(a: Int, b: Int): Stream[Int] = Stream.cons(a, fib(b, a + b))
+
+    fib(0, 1)
+  }
+
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
+    def go(s: S): Stream[A] = {
+      f(s) match {
+        case Some(r) => Stream.cons(r._1, go(r._2))
+        case None => Stream.empty
+      }
+    }
+
+    go(z)
+  }
 }

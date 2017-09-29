@@ -27,3 +27,9 @@ for {
   a <- aa
   b <- bb
 } yield a + b
+
+val ones: Stream[Int] = Stream.cons(1, ones)
+
+ones.map(_ + 1).exists(_ % 2 == 0)
+ones.takeWhile(_ == 1)
+!ones.contains(1)

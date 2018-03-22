@@ -1,5 +1,4 @@
 
-
 val a: Option[Int] = Some(3)
 val b: Option[Int] = Some(3)
 val c: Option[Int] = Some(3)
@@ -33,3 +32,6 @@ val ones: Stream[Int] = Stream.cons(1, ones)
 ones.map(_ + 1).exists(_ % 2 == 0)
 ones.takeWhile(_ == 1)
 !ones.contains(1)
+
+Int.MaxValue
+Int.MinValue
